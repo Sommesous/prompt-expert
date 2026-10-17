@@ -127,7 +127,7 @@ export default function PromptResult({
               </button>
               <button
                 onClick={handleSaveEdit}
-                className="px-3 py-1.5 text-sm bg-[var(--pe-primary)] text-white rounded-lg hover:bg-[var(--pe-primary-dark)] transition-colors"
+                className="px-3 py-1.5 text-sm pe-btn pe-gradient rounded-lg transition-colors"
               >
                 Appliquer
               </button>
@@ -147,7 +147,7 @@ export default function PromptResult({
       <div className="flex flex-wrap gap-2">
         <button
           onClick={handleCopy}
-          className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 bg-[var(--pe-primary)] text-white rounded-lg font-medium text-sm hover:bg-[var(--pe-primary-dark)] transition-colors"
+          className="flex-1 min-w-[120px] flex items-center justify-center gap-2 px-4 py-2.5 pe-btn pe-gradient rounded-lg font-medium text-sm transition-colors"
         >
           {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
           {copied ? 'Copié !' : 'Copier'}
@@ -250,7 +250,7 @@ export default function PromptResult({
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 text-sm bg-[var(--pe-primary)] text-white rounded-lg hover:bg-[var(--pe-primary-dark)] transition-colors"
+                className="px-4 py-2 text-sm pe-btn pe-gradient rounded-lg transition-colors"
               >
                 Sauvegarder
               </button>

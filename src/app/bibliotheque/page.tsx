@@ -124,7 +124,7 @@ export default function BibliothequePage() {
               onClick={() => setFilterFavorites(!filterFavorites)}
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs border transition-colors ${
                 filterFavorites
-                  ? 'border-amber-400 bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-400'
+                  ? 'border-[rgba(251,191,36,.4)] bg-[rgba(251,191,36,.1)] text-[var(--pe-warning)]'
                   : 'border-[var(--pe-border)] hover:bg-[var(--pe-surface-alt)]'
               }`}
             >

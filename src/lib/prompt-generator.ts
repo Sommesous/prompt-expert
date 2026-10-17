@@ -44,6 +44,11 @@ export function generatePrompt(
     sections.push({ title: 'DONNÉES DISPONIBLES', content: info.donnees });
   }
 
+  // === SECTION EXEMPLE ===
+  if (info.exemples) {
+    sections.push({ title: 'EXEMPLE DU RÉSULTAT ATTENDU', content: info.exemples });
+  }
+
   // === SECTION CONTRAINTES ===
   if (info.contraintes && mode !== 'rapide') {
     sections.push({ title: 'CONTRAINTES', content: info.contraintes });
@@ -54,18 +59,33 @@ export function generatePrompt(
     sections.push({ title: 'FORMAT DE SORTIE', content: info.format });
   }
 
+  // === SECTION TON ===
+  if (info.ton) {
+    sections.push({ title: 'TON ATTENDU', content: info.ton });
+  }
+
   // === SECTION CRITÈRES DE QUALITÉ ===
   if (info.qualite && mode === 'expert') {
     sections.push({ title: 'CRITÈRES DE QUALITÉ', content: info.qualite });
   }
 
-  // === SECTION VÉRIFICATIONS (mode expert uniquement) ===
+  // === SECTION VÉRIFICATIONS ===
+  // Toujours présente : garantit un prompt transparent et honnête, qui ne
+  // pousse jamais l'IA à inventer une information par souci de complétude.
+  const verifLines: string[] = [];
   if (mode === 'expert') {
-    sections.push({
-      title: 'VÉRIFICATIONS',
-      content: 'Avant de fournir ta réponse, vérifie :\n- La cohérence de l\'ensemble.\n- L\'absence de contradictions.\n- Que toutes les exigences sont respectées.\n- Que le format demandé est bien suivi.',
-    });
+    verifLines.push('- La cohérence de l\'ensemble.');
+    verifLines.push('- L\'absence de contradictions.');
+    verifLines.push('- Que toutes les exigences sont respectées.');
+    verifLines.push('- Que le format demandé est bien suivi.');
   }
+  if (info.verification === 'critique') {
+    verifLines.push('- La précision factuelle est critique ici : vérifie chaque donnée chiffrée ou factuelle avant de l\'avancer.');
+    verifLines.push('- Si une information n\'est pas certaine ou vérifiable, dis-le clairement au lieu de l\'inventer. Cite tes sources quand c\'est pertinent.');
+  } else {
+    verifLines.push('- Si tu n\'es pas sûr d\'une information, signale-le plutôt que de l\'inventer.');
+  }
+  sections.push({ title: 'VÉRIFICATIONS', content: verifLines.join('\n') });
 
   // Assembler le prompt
   return assemblePrompt(sections, mode);
@@ -98,15 +118,27 @@ function extractInfo(answers: QuestionAnswer[]): Record<string, string> {
 
     switch (answer.questionId) {
       case 'q_objectif': info.objectif = value; break;
+      case 'q_role': info.roleChoisi = value; break;
       case 'q_contexte': info.contexte = value; break;
       case 'q_public': info.public = value; break;
       case 'q_format': info.format = value; break;
+      case 'q_ton': info.ton = value; break;
       case 'q_donnees': info.donnees = value; break;
+      case 'q_exemples': info.exemples = value; break;
       case 'q_contraintes': info.contraintes = value; break;
       case 'q_qualite': info.qualite = value; break;
       case 'q_donnees_type': info.typesDonnees = value; break;
       case 'q_redaction_type': info.typeRedaction = value; break;
       case 'q_tech_stack': info.technologies = value; break;
+      case 'q_verification':
+        info.verification = answer.selectedOptions.includes('critique')
+          ? 'critique'
+          : answer.selectedOptions.includes('estimation')
+          ? 'estimation'
+          : answer.selectedOptions.includes('creatif')
+          ? 'creatif'
+          : '';
+        break;
       default:
         // Questions générées par l'IA
         info[answer.questionId] = value;
@@ -120,6 +152,22 @@ function extractInfo(answers: QuestionAnswer[]): Record<string, string> {
  * Construit la section rôle
  */
 function buildRole(info: Record<string, string>, idea: string): string | null {
+  // Si l'utilisateur a explicitement choisi un rôle, on le respecte tel quel —
+  // pas de déduction automatique qui pourrait contredire son choix.
+  const roleLabels: Record<string, string> = {
+    expert_technique: 'un expert technique rigoureux',
+    redacteur: 'un rédacteur professionnel',
+    analyste: 'un analyste de données expérimenté',
+    consultant: 'un consultant stratégique',
+    formateur: 'un formateur pédagogue',
+    generaliste: 'un assistant généraliste',
+  };
+  if (info.roleChoisi) {
+    const key = Object.keys(roleLabels).find(k => info.roleChoisi.includes(k));
+    if (key) return `Tu es ${roleLabels[key]}.`;
+    return `Tu es ${info.roleChoisi}.`;
+  }
+
   const roles: string[] = [];
 
   if (info.objectif?.includes('analyser') || info.typesDonnees) {
@@ -184,16 +232,17 @@ function buildInstructions(info: Record<string, string>, mode: PromptMode): stri
   const instructions: string[] = [];
 
   if (mode === 'expert') {
-    instructions.push('Procède étape par étape.');
-    instructions.push('Explique ton raisonnement.');
+    instructions.push('Décompose ta réflexion étape par étape avant de répondre.');
+    instructions.push('Explique brièvement ton raisonnement si c\'est utile à la compréhension.');
   }
 
   if (mode === 'rapide') {
     instructions.push('Sois concis et va droit au but.');
   }
 
-  // Ajouter les textes libres des réponses "conseille-moi"
-  // (qui ont été marquées comme hypothèses)
+  if (info.exemples) {
+    instructions.push('Appuie-toi sur l\'exemple fourni pour caler le style et le format attendus.');
+  }
 
   return instructions.length > 0 ? instructions.join('\n') : null;
 }

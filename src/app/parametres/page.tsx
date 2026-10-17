@@ -88,7 +88,7 @@ export default function ParametresPage() {
             <div className="flex items-center gap-3">
               <button
                 onClick={handleSave}
-                className="px-5 py-2 bg-[var(--pe-primary)] text-white rounded-lg text-sm font-medium hover:bg-[var(--pe-primary-dark)] transition-colors"
+                className="px-5 py-2 pe-btn pe-gradient rounded-lg text-sm font-medium transition-colors"
               >
                 Enregistrer
               </button>
@@ -102,8 +102,8 @@ export default function ParametresPage() {
             {/* Status */}
             <div className={`p-3 rounded-lg text-sm ${
               config.aiEnabled
-                ? 'bg-green-50 border border-green-200 text-green-800 dark:bg-green-900/20 dark:border-green-800 dark:text-green-400'
-                : 'bg-amber-50 border border-amber-200 text-amber-800 dark:bg-amber-900/20 dark:border-amber-800 dark:text-amber-400'
+                ? 'bg-[rgba(74,222,128,.08)] border border-[rgba(74,222,128,.3)] text-[var(--pe-success)]'
+                : 'bg-[rgba(251,191,36,.08)] border border-[rgba(251,191,36,.3)] text-[var(--pe-warning)]'
             }`}>
               {config.aiEnabled
                 ? '✅ IA activée — Les questions intelligentes et l\'optimisation avancée sont disponibles.'

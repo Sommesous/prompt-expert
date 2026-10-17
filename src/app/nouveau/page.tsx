@@ -14,6 +14,15 @@ import { Sparkles, ArrowRight } from 'lucide-react';
 
 type Step = 'idea' | 'questions' | 'summary' | 'result';
 
+// Petits messages de transition entre les 3 chapitres de la conversation,
+// pour que l'enchaînement des questions ressemble à un échange avec un
+// collègue plutôt qu'à un formulaire administratif.
+const CHAPTER_INTROS: Record<string, string> = {
+  contexte: 'Pour commencer, parlons un peu du contexte — ça m\'aide à cadrer la suite.',
+  tache: 'Noté. Voyons maintenant ce qu\'il faut faire, concrètement.',
+  regles: 'Presque fini — on règle les derniers détails (format, ton, contraintes).',
+};
+
 export default function NouveauPage() {
   // État principal
   const [step, setStep] = useState<Step>('idea');
@@ -131,13 +140,10 @@ export default function NouveauPage() {
         {/* ÉTAPE : IDÉE */}
         {step === 'idea' && (
           <div className="animate-fade-in space-y-6">
-            <div className="text-center space-y-2 pt-4">
-              <div className="w-12 h-12 mx-auto rounded-xl bg-[var(--pe-primary)]/10 flex items-center justify-center mb-3">
-                <Sparkles className="w-6 h-6 text-[var(--pe-primary)]" />
-              </div>
-              <h1 className="text-2xl font-bold">Créer un prompt</h1>
-              <p className="text-[var(--pe-text-secondary)] text-sm max-w-md mx-auto">
-                Décris ton besoin en quelques mots ou phrases. Je vais te poser les bonnes questions pour construire le meilleur prompt possible.
+            <div className="text-center space-y-3 pt-6">
+              <h1 className="pe-rise pe-d1 font-display text-3xl font-semibold tracking-tight">Alors, c&apos;est quoi l&apos;idée&nbsp;?</h1>
+              <p className="pe-rise pe-d2 text-[var(--pe-text-secondary)] text-[15px] leading-relaxed max-w-md mx-auto">
+                Décris ton besoin en quelques mots, sans te prendre la tête. Je te poserai ensuite les bonnes questions pour construire le meilleur prompt possible.
               </p>
             </div>
 
@@ -184,7 +190,7 @@ export default function NouveauPage() {
             <button
               onClick={handleIdeaSubmit}
               disabled={!idea.trim()}
-              className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-[var(--pe-primary)] text-white rounded-xl font-medium hover:bg-[var(--pe-primary-dark)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              className="w-full flex items-center justify-center gap-2 px-6 py-3 pe-btn pe-gradient rounded-xl font-medium disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               Commencer
               <ArrowRight className="w-4 h-4" />
@@ -196,7 +202,27 @@ export default function NouveauPage() {
         {step === 'questions' && questions.length > 0 && (
           <div>
             {currentQuestionIndex < questions.length ? (
-              <QuestionCard
+              <>
+                {(() => {
+                  const current = questions[currentQuestionIndex];
+                  const previous = currentQuestionIndex > 0 ? questions[currentQuestionIndex - 1] : null;
+                  const isNewChapter = current.chapter && current.chapter !== previous?.chapter;
+                  if (!isNewChapter || !current.chapter) return null;
+                  const intro = CHAPTER_INTROS[current.chapter];
+                  if (!intro) return null;
+                  return (
+                    <div key={current.chapter} className="animate-fade-in flex items-end gap-2.5 mb-6">
+                      <span className="pe-gradient-diag w-7 h-7 rounded-full flex items-center justify-center shrink-0">
+                        <Sparkles className="w-3.5 h-3.5 text-[var(--pe-on-primary)]" strokeWidth={2.4} />
+                      </span>
+                      <div className="px-4 py-3 rounded-[4px_16px_16px_16px] bg-[var(--pe-surface)] border border-[var(--pe-border)] text-[13.5px] leading-relaxed text-[#d4d3dc]">
+                        {intro}
+                      </div>
+                    </div>
+                  );
+                })()}
+                <QuestionCard
+                key={questions[currentQuestionIndex].id}
                 question={questions[currentQuestionIndex]}
                 questionNumber={currentQuestionIndex + 1}
                 totalQuestions={questions.length}
@@ -210,13 +236,14 @@ export default function NouveauPage() {
                     handleFinishQuestions();
                   }
                 } : null}
-              />
+                />
+              </>
             ) : (
               <div className="text-center py-8">
                 <p className="text-[var(--pe-text-secondary)] mb-4">Toutes les questions ont été posées.</p>
                 <button
                   onClick={handleFinishQuestions}
-                  className="px-6 py-2.5 bg-[var(--pe-primary)] text-white rounded-lg font-medium hover:bg-[var(--pe-primary-dark)] transition-colors"
+                  className="px-6 py-2.5 pe-btn pe-gradient rounded-lg font-medium transition-colors"
                 >
                   Voir le récapitulatif
                 </button>

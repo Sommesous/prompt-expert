@@ -24,6 +24,9 @@ export interface QuestionOption {
   description?: string;
 }
 
+/** Chapitre de la conversation (structure contexte → tâche → règles) */
+export type QuestionChapter = 'contexte' | 'tache' | 'regles';
+
 /** Question adaptative */
 export interface AdaptiveQuestion {
   id: string;
@@ -33,6 +36,7 @@ export interface AdaptiveQuestion {
   placeholder?: string;
   required: boolean;
   helpText?: string;
+  chapter?: QuestionChapter;
 }
 
 /** Réponse à une question */

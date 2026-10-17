@@ -73,12 +73,12 @@ export default function Summary({ items, issues, onEdit, onValidate, onBack }: S
                     {item.label}
                   </span>
                   {item.status === 'confirmed' && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-[rgba(74,222,128,.12)] text-[var(--pe-success)]">
                       Confirmé
                     </span>
                   )}
                   {item.status === 'hypothesis' && (
-                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                    <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-[rgba(251,191,36,.12)] text-[var(--pe-warning)]">
                       Hypothèse
                     </span>
                   )}
@@ -110,7 +110,7 @@ export default function Summary({ items, issues, onEdit, onValidate, onBack }: S
         <button
           onClick={onValidate}
           disabled={hasCritical}
-          className="px-6 py-2.5 bg-[var(--pe-primary)] text-white rounded-lg font-medium text-sm hover:bg-[var(--pe-primary-dark)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-6 py-2.5 pe-btn pe-gradient rounded-lg font-medium text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {hasCritical ? 'Résous les problèmes critiques' : 'Générer le prompt ✨'}
         </button>

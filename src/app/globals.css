@@ -1,59 +1,129 @@
 @import "tailwindcss";
 
+/* === Thème « Fusion » : sombre, indigo, conversationnel === */
 :root {
-  --background: #f8fafc;
-  --foreground: #1e293b;
-  --pe-primary: #6366f1;
-  --pe-primary-light: #818cf8;
-  --pe-primary-dark: #4f46e5;
-  --pe-accent: #f59e0b;
-  --pe-surface: #ffffff;
-  --pe-surface-alt: #f1f5f9;
-  --pe-border: #e2e8f0;
-  --pe-text-secondary: #64748b;
-  --pe-success: #10b981;
-  --pe-warning: #f59e0b;
-  --pe-error: #ef4444;
-  --pe-info: #3b82f6;
+  color-scheme: dark;
+  --background: #0f0f14;
+  --foreground: #efeff3;
+  --pe-primary: #818cf8;
+  --pe-primary-light: #c7d2fe;
+  --pe-primary-dark: #a5b4fc;      /* teinte de survol (plus claire sur fond sombre) */
+  --pe-primary-deep: #6366f1;
+  --pe-on-primary: #0f0f14;         /* texte posé sur l'accent */
+  --pe-accent: #a5b4fc;
+  --pe-surface: #1a1a22;
+  --pe-surface-alt: #1d1e27;
+  --pe-border: #26262f;
+  --pe-border-strong: #3a3b52;
+  --pe-text-secondary: #9d9ba8;
+  --pe-text-muted: #6d6b78;
+  --pe-success: #4ade80;
+  --pe-warning: #fbbf24;
+  --pe-error: #f87171;
+  --pe-info: #60a5fa;
+  --pe-star: #fbbf24;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0f172a;
-    --foreground: #f1f5f9;
-    --pe-surface: #1e293b;
-    --pe-surface-alt: #334155;
-    --pe-border: #475569;
-    --pe-text-secondary: #94a3b8;
-  }
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces', Georgia, serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
+
+/* Halo lumineux en haut de page, qui respire lentement */
+body::before {
+  content: '';
+  position: fixed;
+  top: -260px;
+  left: 50%;
+  width: min(900px, 140vw);
+  height: 480px;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(129, 140, 248, .18), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: pe-glow 7s ease-in-out infinite;
+}
+body > * { position: relative; z-index: 1; }
+
+.font-display { font-family: 'Fraunces', Georgia, serif; }
+.font-code { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+.pe-gradient { background: linear-gradient(90deg, #818cf8, #6366f1); color: var(--pe-on-primary); }
+.pe-gradient-diag { background: linear-gradient(135deg, #818cf8, #6366f1); }
 
 *:focus-visible {
   outline: 2px solid var(--pe-primary);
   outline-offset: 2px;
 }
 
+::selection { background: rgba(129, 140, 248, .35); }
+
+/* === Animations légères === */
+@keyframes pe-glow {
+  0%, 100% { opacity: .65; transform: translateX(-50%) scale(1); }
+  50% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+}
+
+@keyframes pe-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.pe-rise { animation: pe-rise .7s cubic-bezier(.2, .7, .2, 1) both; }
+.pe-d1 { animation-delay: .05s; }
+.pe-d2 { animation-delay: .15s; }
+.pe-d3 { animation-delay: .25s; }
+.pe-d4 { animation-delay: .35s; }
+.pe-d5 { animation-delay: .5s; }
+.pe-d6 { animation-delay: .7s; }
+.pe-d7 { animation-delay: .85s; }
+
+@keyframes pe-breathe {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0); }
+  50% { box-shadow: 0 0 0 6px rgba(129, 140, 248, .14); }
+}
+.pe-breathe { animation: pe-breathe 3.5s ease-in-out infinite; }
+
+.pe-card { transition: transform .2s ease, border-color .2s ease, background-color .2s ease; }
+.pe-card:hover { transform: translateY(-2px); border-color: var(--pe-border-strong); }
+
+.pe-btn { transition: transform .2s ease, filter .2s ease, box-shadow .2s ease; }
+.pe-btn:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.1); }
+.pe-btn:active:not(:disabled) { transform: translateY(0); }
+
+/* Compatibilité avec les anciennes classes */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: translateY(0); }
 }
-.animate-fade-in { animation: fadeIn 0.3s ease-out; }
+.animate-fade-in { animation: fadeIn .4s ease-out both; }
 
 @keyframes slideIn {
-  from { opacity: 0; transform: translateX(20px); }
+  from { opacity: 0; transform: translateX(16px); }
   to { opacity: 1; transform: translateX(0); }
 }
-.animate-slide-in { animation: slideIn 0.3s ease-out; }
+.animate-slide-in { animation: slideIn .35s ease-out both; }
+
+/* Indicateur « en train d'écrire » */
+@keyframes pe-typing {
+  0%, 60%, 100% { opacity: .25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-2px); }
+}
+.pe-typing span { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--pe-primary); animation: pe-typing 1.2s infinite; }
+.pe-typing span:nth-child(2) { animation-delay: .15s; }
+.pe-typing span:nth-child(3) { animation-delay: .3s; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
