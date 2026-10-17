@@ -1,0 +1,173 @@
+========================================================
+   PROMPT EXPERT — GUIDE D'INSTALLATION PAS A PAS
+========================================================
+
+Ce guide est fait pour quelqu'un qui n'a jamais installe
+d'application de ce type. Suis chaque etape dans l'ordre.
+
+========================================================
+ETAPE 1 : INSTALLER NODE.JS
+========================================================
+
+Node.js est le moteur qui fait tourner l'application.
+Tu n'as besoin de l'installer qu'une seule fois.
+
+1. Ouvre ton navigateur (Chrome, Edge, Firefox...)
+2. Va sur : https://nodejs.org/fr
+3. Clique sur le gros bouton vert "LTS" (version recommandee)
+4. Le fichier se telecharge (exemple : node-v22.x.x-x64.msi)
+5. Double-clique sur le fichier telecharge
+6. Clique "Next" a chaque etape (garde les options par defaut)
+7. Clique "Install" puis "Finish"
+
+Pour verifier que ca a marche :
+- Appuie sur les touches Windows + R
+- Tape : cmd
+- Appuie sur Entree
+- Dans la fenetre noire, tape : node --version
+- Tu dois voir un numero comme v22.x.x
+- Si oui, c'est bon ! Ferme cette fenetre.
+
+========================================================
+ETAPE 2 : EXTRAIRE LE DOSSIER DU PROJET
+========================================================
+
+1. Tu as recu un fichier "prompt-expert.zip"
+2. Fais un clic droit dessus
+3. Clique "Extraire tout..." (ou "Extract All...")
+4. Choisis un endroit simple, par exemple : C:\prompt-expert
+   ou ton Bureau
+5. Clique "Extraire"
+
+Tu dois voir un dossier "prompt-expert" contenant
+des sous-dossiers comme "src", "public", etc.
+
+========================================================
+ETAPE 3 : INSTALLER LES DEPENDANCES
+========================================================
+
+C'est comme telecharger les pieces necessaires
+pour faire fonctionner l'application.
+
+1. Ouvre l'Explorateur de fichiers
+2. Va dans le dossier prompt-expert que tu as extrait
+3. Clique dans la barre d'adresse en haut (la ou tu vois le chemin)
+4. Tape : cmd
+5. Appuie sur Entree
+   --> Une fenetre noire s'ouvre dans le bon dossier
+
+6. Dans cette fenetre noire, tape cette commande :
+   npm install
+7. Appuie sur Entree
+8. Attends que ca finisse (ca peut prendre 1-2 minutes)
+   Tu verras du texte defiler, c'est normal.
+   Attends de voir "added XXX packages" a la fin.
+
+========================================================
+ETAPE 4 : LANCER L'APPLICATION
+========================================================
+
+Toujours dans la meme fenetre noire :
+
+1. Tape cette commande :
+   npm run dev
+2. Appuie sur Entree
+3. Attends quelques secondes
+4. Tu verras un message comme :
+   "Ready in 2.3s"
+   "Local: http://localhost:3000"
+
+5. Ouvre ton navigateur
+6. Tape dans la barre d'adresse : http://localhost:3000
+7. Appuie sur Entree
+
+--> Prompt Expert s'ouvre ! Tu peux l'utiliser.
+
+========================================================
+COMMENT UTILISER L'APPLICATION
+========================================================
+
+1. Clique sur "Creer un prompt"
+2. Decris ton besoin en quelques mots
+3. Choisis le mode (Rapide, Equilibre ou Expert)
+4. Choisis l'IA cible (ChatGPT, Claude, Gemini...)
+5. Clique "Commencer"
+6. Reponds aux questions (coche + texte libre)
+7. Verifie le recapitulatif
+8. Genere ton prompt !
+9. Copie-le et colle-le dans ton IA preferee
+
+========================================================
+COMMENT ARRETER L'APPLICATION
+========================================================
+
+1. Va dans la fenetre noire (le terminal)
+2. Appuie sur Ctrl + C
+3. L'application s'arrete
+4. Tu peux fermer la fenetre
+
+========================================================
+COMMENT RELANCER L'APPLICATION
+========================================================
+
+Tu n'as PAS besoin de refaire les etapes 1, 2 et 3.
+Fais seulement :
+
+1. Va dans le dossier prompt-expert
+2. Clique dans la barre d'adresse, tape : cmd, Entree
+3. Tape : npm run dev
+4. Ouvre http://localhost:3000 dans ton navigateur
+
+========================================================
+OPTIONNEL : CONFIGURER L'IA (GEMINI GRATUIT)
+========================================================
+
+Sans cle API, l'application fonctionne avec des questions
+pre-definies (mode template). Pour activer les questions
+intelligentes generees par IA :
+
+1. Va sur : https://aistudio.google.com/app/apikey
+2. Connecte-toi avec ton compte Google
+3. Clique "Create API Key"
+4. Copie la cle (commence par "AIza...")
+5. Dans Prompt Expert, va dans "Parametres"
+6. Colle la cle dans le champ "Cle API Gemini"
+7. Clique "Enregistrer"
+
+C'est gratuit dans les limites d'utilisation normale.
+
+========================================================
+EN CAS DE PROBLEME
+========================================================
+
+"npm n'est pas reconnu comme commande"
+--> Node.js n'est pas installe. Refais l'etape 1.
+    Apres installation, ferme et rouvre le terminal.
+
+"Le port 3000 est deja utilise"
+--> Une autre application utilise ce port.
+    Tape : npm run dev -- --port 3001
+    Puis ouvre http://localhost:3001
+
+"EACCES permission denied"
+--> Lance le terminal en tant qu'administrateur
+    (clic droit sur cmd > Executer en tant qu'admin)
+
+L'application s'ouvre mais la page est blanche :
+--> Attends quelques secondes, puis rafraichis (F5)
+
+========================================================
+RAPPELS IMPORTANTS
+========================================================
+
+- Tes donnees sont stockees dans TON navigateur.
+  Si tu changes de navigateur, tes prompts sauvegardes
+  ne seront pas visibles dans l'autre.
+
+- Pense a exporter tes donnees regulierement
+  (Parametres > Exporter tout).
+
+- La fenetre noire (terminal) doit rester ouverte
+  tant que tu utilises l'application.
+
+========================================================
